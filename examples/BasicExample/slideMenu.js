@@ -71,7 +71,8 @@ var SlideMenu = React.createClass({
     this.toggleSlideMenu();
     this.firstTouch = true;
   },
-  routeFrontView: function(fragmentId) {
+
+  routeFrontView(fragmentId) {
     this.props.routeFrontView(fragmentId);
   },
 
@@ -82,6 +83,7 @@ var SlideMenu = React.createClass({
         <View style={styles.overlay}/>
       </TouchableWithoutFeedback> ;
     }
+
     var menu = React.cloneElement(
       this.props.menu,
       {
@@ -89,13 +91,14 @@ var SlideMenu = React.createClass({
         routeFrontView: this.routeFrontView,
       }
     );
-    var frontView = React.cloneElement(
-      this.props.frontView,
-      {
-        toggleSlideMenu: this.toggleSlideMenu,
-        routeFrontView:this.routeFrontView,
-      }
-    )
+    // var frontView = React.cloneElement(
+    //   this.props.frontView,
+    //   {
+    //     toggleSlideMenu: this.toggleSlideMenu,
+    //     routeFrontView:this.routeFrontView,
+    //   }
+    // );
+
     return (
       <View style={[styles.containerSlideMenu, this.props.style]}>
         <View style={styles.right}>
@@ -105,11 +108,11 @@ var SlideMenu = React.createClass({
           style={[styles.center, {right: this.offset}]}
           ref={(center) => this.center = center}
           {...this._panGesture.panHandlers}>
-          {frontView}
+          {this.props.frontView}
           {overlay}
         </View>
       </View>
-    )
+    );
   },
 });
 

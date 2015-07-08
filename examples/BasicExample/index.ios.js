@@ -57,7 +57,7 @@ var BasicExample = React.createClass({
     return ({ route: 'firstpage' });
   },
 
-  routeFrontView() {
+  updateFrontView() {
     switch (this.state.route) {
       case 'firstpage':
         return <FirstPage />;
@@ -66,15 +66,15 @@ var BasicExample = React.createClass({
     }
   },
 
-  updateFrontView(fragmentId) {
+  routeFrontView(fragmentId) {
     this.setState({ route: fragmentId });
   },
 
   render() {
-    var fragment = this.routeFrontView();
+    var fragment = this.updateFrontView();
     return (
       <View style={styles.container}>
-        <SlideMenu frontView={fragment} routeFrontView={this.updateFrontView}
+        <SlideMenu frontView={fragment} routeFrontView={this.routeFrontView}
           menu={<Menu />}/>
       </View>
     );

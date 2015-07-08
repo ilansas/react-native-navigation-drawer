@@ -21,7 +21,7 @@ var BasicExample = React.createClass({
   updateFrontView() {
     switch (this.state.route) {
       case 'firstpage':
-        return <FirstPage />;
+        return <FirstPage routeFrontView={this.routeFrontView}/>;
       case 'secondpage':
         return <SecondPage />;
     }

@@ -8,10 +8,14 @@ var {
 } = React;
 
 var FirstPage = React.createClass({
+  onPress() {
+    this.props.routeFrontView('secondpage');
+  },
   render() {
     return (
       <View style={pageStyle.firstpage}>
         <Text style={pageStyle.text}>Yep, this is the first page</Text>
+        <Text style={pageStyle.button} onPress={this.onPress}>Go to second page !</Text>
       </View>
     );
   }
@@ -37,6 +41,10 @@ var pageStyle = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: "#0F0"
+  },
+  button: {
+    backgroundColor: '#0F0',
+    marginTop: 15,
   },
   text: {
     marginTop: 50,

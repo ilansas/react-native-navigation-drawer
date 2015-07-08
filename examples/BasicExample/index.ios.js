@@ -1,7 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
@@ -14,43 +10,8 @@ var {
 
 var SlideMenu = require('./slideMenu.js');
 var Menu = require('./menu.js');
-
-var FirstPage = React.createClass({
-  render() {
-    return (
-      <View style={pageStyle.firstpage}/>
-    )
-  }
-});
-
-var SecondPage = React.createClass({
-  render() {
-    return (
-      <View style={pageStyle.secondpage}/>
-    )
-  }
-});
-
-var pageStyle = StyleSheet.create({
-  firstpage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    flex: 1,
-    backgroundColor: "#F00"
-  },
-  secondpage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    flex: 1,
-    backgroundColor: "#0F0"
-  }
-});
+var FirstPage = require('./pages.js').FirstPage;
+var SecondPage = require('./pages.js').SecondPage;
 
 var BasicExample = React.createClass({
   getInitialState(fragmentId) {

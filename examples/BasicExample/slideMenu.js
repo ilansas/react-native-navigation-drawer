@@ -5,10 +5,6 @@ var {
   PanResponder,
   StyleSheet,
   View,
-  ListView,
-  Navigator,
-  Text,
-  TouchableHighlight,
   TouchableWithoutFeedback,
 } = React
 
@@ -18,13 +14,13 @@ var queueAnimation = require('./animations.js');
 
 var SlideMenu = React.createClass({
   firstTouch: true,
-  getInitialState: function() {
+  getInitialState() {
     return ({
       slideMenuIsOpen: false,
       slideMenuIsAccessible: true,
     });
   },
-  componentWillMount: function() {
+  componentWillMount() {
     this.offset = 0 // Contains the center view offset from the right edge
     this._panGesture = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
@@ -47,12 +43,12 @@ var SlideMenu = React.createClass({
       onPanResponderTerminate: this.moveFinished,
     });
   },
-  moveCenterView: function(right) {
+  moveCenterView(right) {
     if (!this.center) return;
     this.right = right;
     this.center.setNativeProps({ right: this.offset - this.right });
   },
-  toggleSlideMenu: function() {
+  toggleSlideMenu() {
     if (this.state.slideMenuIsOpen) {
       this.offset = 0;
       this.setState({ slideMenuIsOpen: false });
@@ -63,10 +59,8 @@ var SlideMenu = React.createClass({
     queueAnimation(this.props.animation);
     this.center.setNativeProps({ right: this.offset });
   },
-  moveFinished: function() {
+  moveFinished() {
     if (!this.center) return;
-
-    var offset = this.offset + this.right
 
     this.toggleSlideMenu();
     this.firstTouch = true;
@@ -79,9 +73,9 @@ var SlideMenu = React.createClass({
   render() {
     if (this.state.slideMenuIsOpen) {
       var overlay =
-      <TouchableWithoutFeedback onPress={this.toggleSlideMenu}>
-        <View style={styles.overlay}/>
-      </TouchableWithoutFeedback> ;
+        <TouchableWithoutFeedback onPress={this.toggleSlideMenu}>
+          <View style={styles.overlay}/>
+        </TouchableWithoutFeedback> ;
     }
 
     var menu = React.cloneElement(
@@ -91,13 +85,6 @@ var SlideMenu = React.createClass({
         routeFrontView: this.routeFrontView,
       }
     );
-    // var frontView = React.cloneElement(
-    //   this.props.frontView,
-    //   {
-    //     toggleSlideMenu: this.toggleSlideMenu,
-    //     routeFrontView:this.routeFrontView,
-    //   }
-    // );
 
     return (
       <View style={[styles.containerSlideMenu, this.props.style]}>

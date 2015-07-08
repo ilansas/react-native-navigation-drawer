@@ -13,22 +13,26 @@ var {
 
 var Menu = React.createClass({
   render: function() {
+        // <View style={styles.footer}>
+        //   <Text style={styles.footerIcon}>&#xF0A9;</Text>
+        //   <Text style={styles.footerIcon}>&#xF0D2;</Text>
+        // </View>
     return (
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           style={styles.scrollView}>
           <Section
-            id='suggestions'
+            id='firstpage'
             icon='&#xF0A7;'
-            name='SUGGESTIONS'
+            name='FIRST PAGE'
             toggleSlideMenu={this.props.toggleSlideMenu}
             setFragmentId={this.props.setFragmentId}/>
 
           <Section
-            id='onScreen'
+            id='secondpage'
             icon='&#xF0B8;'
-            name='A L&apos;ECRAN'
+            name='SECOND PAGE'
             toggleSlideMenu={this.props.toggleSlideMenu}
             setFragmentId={this.props.setFragmentId}/>
 
@@ -61,10 +65,6 @@ var Menu = React.createClass({
             setFragmentId={this.props.setFragmentId}/>
 
         </ScrollView>
-        <View style={styles.footer}>
-          <Text style={styles.footerIcon}>&#xF0A9;</Text>
-          <Text style={styles.footerIcon}>&#xF0D2;</Text>
-        </View>
       </View>
     );
   }
@@ -72,19 +72,18 @@ var Menu = React.createClass({
 
 var Section = React.createClass({
   onPress: function() {
-    this.props.toggleSlideMenu();
-    if(this.props.setFragmentId)
-      this.props.setFragmentId(this.props.id);
-    if (this.props.toggleAccounts)
-      this.props.toggleAccounts();
+    if (this.props.toggleSlideMenu)
+      this.props.toggleSlideMenu();
+    if(this.props.routeFrontView)
+      this.props.routeFrontView(this.props.id);
   },
   render: function() {
+          // <View style={styles.iconZone}>
+          //   <Text style={styles.icon}>{this.props.icon}</Text>
+          // </View>
     return (
       <TouchableHighlight underlayColor='#DFDFDF' onPress={this.onPress}>
         <View style={styles.section}>
-          <View style={styles.iconZone}>
-            <Text style={styles.icon}>{this.props.icon}</Text>
-          </View>
           <Text style={styles.sectionName}>{this.props.name.toUpperCase()}</Text>
         </View>
       </TouchableHighlight>
@@ -109,39 +108,38 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  iconZone: {
-    width: 40,
-  },
-  icon: {
-    fontFamily: 'CanalDemiRomainG7',
-    fontSize: 30,
-    alignSelf: 'center',
-    color: '#858585',
-  },
+  // iconZone: {
+  //   width: 40,
+  // },
+  // icon: {
+  //   fontFamily: 'CanalDemiRomainG7',
+  //   fontSize: 30,
+  //   alignSelf: 'center',
+  //   color: '#858585',
+  // },
   sectionName: {
-    fontFamily: 'CanalDemiRomainG7',
+    //fontFamily: 'CanalDemiRomainG7',
     fontSize: 15,
     marginLeft: 10,
   },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    height: 50,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#3D3D3D'
-  },
-  footerIcon: {
-    fontFamily: 'CanalDemiRomainG7',
-    color: '#858585',
-    fontSize: 30,
-    marginLeft: 30,
-    marginRight: 30,
-  },
+  // footer: {
+  //   position: 'absolute',
+  //   bottom: 0,
+  //   left: 0,
+  //   right: 0,
+  //   flexDirection: 'row',
+  //   height: 50,
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  //   backgroundColor: '#3D3D3D'
+  // },
+  // footerIcon: {
+  //   fontFamily: 'CanalDemiRomainG7',
+  //   color: '#858585',
+  //   fontSize: 30,
+  //   marginLeft: 30,
+  //   marginRight: 30,
+  // },
 });
 
-module.exports = Section;
 module.exports = Menu;

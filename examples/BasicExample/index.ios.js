@@ -13,34 +13,44 @@ var {
 } = React;
 
 var SlideMenu = require('./slideMenu.js');
+var Menu = require('./menu.js');
 
 var FirstPage = React.createClass({
   render() {
     return (
-      <View style={firstPageStyle.container}/>
+      <View style={pageStyle.firstpage}/>
     )
   }
 });
-var firstPageStyle = StyleSheet.create({
-  container: {
+
+var SecondPage = React.createClass({
+  render() {
+    return (
+      <View style={pageStyle.secondpage}/>
+    )
+  }
+});
+
+var pageStyle = StyleSheet.create({
+  firstpage: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+    flex: 1,
+    backgroundColor: "#F00"
+  },
+  secondpage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flex: 1,
+    backgroundColor: "#0F0"
   }
 });
-
-var menuItems = [
-  {
-    name: 'First Page',
-    fragmentId: 'firstpage'
-  },
-  {
-    name: 'Second Page',
-    fragmentId: 'secondpage'
-  }
-]
 
 var BasicExample = React.createClass({
   getInitialState(fragmentId) {
@@ -48,36 +58,24 @@ var BasicExample = React.createClass({
   },
 
   routeFrontView() {
-    return (
-      switch (this.state.route) {
-        case 'firstpage':
-          return <FirstPage />;
-        case 'firstpage':
-          return <SecondPage />;
-      }
-    );
+    switch (this.state.route) {
+      case 'firstpage':
+        return <FirstPage />;
+      case 'secondpage':
+        return <SecondPage />;
+    }
   },
 
   updateFrontView(fragmentId) {
     this.setState({ route: fragmentId });
-  }
+  },
 
   render() {
     var fragment = this.routeFrontView();
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
         <SlideMenu frontView={fragment} routeFrontView={this.updateFrontView}
-          menuItems={}/>
+          menu={<Menu />}/>
       </View>
     );
   }
@@ -86,19 +84,6 @@ var BasicExample = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 

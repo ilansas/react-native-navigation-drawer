@@ -14,10 +14,7 @@ var {
 
 var Dimensions = require('Dimensions')
 var screenWidth = Dimensions.get('window').width
-var queueAnimation ;//= require('./animations/slideMenuAnimations.js');
-
-var Menu = this.props.children;
-// var GeneralTemplate;// = this.props.frontView;
+var queueAnimation = require('./animations.js');
 
 var SlideMenu = React.createClass({
   firstTouch: true,
@@ -56,7 +53,7 @@ var SlideMenu = React.createClass({
     this.center.setNativeProps({ right: this.offset - this.right });
   },
   toggleSlideMenu: function() {
-    if(this.state.slideMenuIsOpen) {
+    if (this.state.slideMenuIsOpen) {
       this.offset = 0;
       this.setState({ slideMenuIsOpen: false });
     } else {
@@ -74,43 +71,42 @@ var SlideMenu = React.createClass({
     this.toggleSlideMenu();
     this.firstTouch = true;
   },
-  setFragmentId: function(fragmentId) {
-    this.setState({ fragmentId: fragmentId });
+  routeFrontView: function(fragmentId) {
+    this.props.routeFrontView(fragmentId);
   },
-  toggleAccounts: function() {
-      this.setState({ accountMenuIsOpen: !this.state.accountMenuIsOpen });
-  },
-  onAccountSelected: function(userName) {
-    this.setState({
-      accountMenuIsOpen: false,
-      currentUser: userName
-    });
-  },
-  render: function() {
+
+  render() {
     if (this.state.slideMenuIsOpen) {
-      var darkUnactive =
+      var overlay =
       <TouchableWithoutFeedback onPress={this.toggleSlideMenu}>
-        <View style={styles.darkUnactive}/>
+        <View style={styles.overlay}/>
       </TouchableWithoutFeedback> ;
     }
+    var menu = React.cloneElement(
+      this.props.menu,
+      {
+        toggleSlideMenu: this.toggleSlideMenu,
+        routeFrontView: this.routeFrontView,
+      }
+    );
+    var frontView = React.cloneElement(
+      this.props.frontView,
+      {
+        toggleSlideMenu: this.toggleSlideMenu,
+        routeFrontView:this.routeFrontView,
+      }
+    )
     return (
       <View style={[styles.containerSlideMenu, this.props.style]}>
         <View style={styles.right}>
-          <Menu
-            toggleSlideMenu={this.toggleSlideMenu}
-            setFragmentId={this.setFragmentId}
-            toggleAccounts={this.toggleAccounts}
-            currentUser={this.state.currentUser}/>
+          {menu}
         </View>
         <View
           style={[styles.center, {right: this.offset}]}
           ref={(center) => this.center = center}
           {...this._panGesture.panHandlers}>
-          <GeneralTemplate
-            toggleSlideMenu={this.toggleSlideMenu}
-            fragmentId={this.props.fragmentId}
-            setFragmentId={this.props.setFragmentId}/>
-            {darkUnactive}
+          {frontView}
+          {overlay}
         </View>
       </View>
     )
@@ -120,10 +116,6 @@ var SlideMenu = React.createClass({
 var styles = StyleSheet.create({
   containerSlideMenu: {
     flex: 1,
-  },
-  containerAccounts: {
-    flex: 1,
-    backgroundColor: '#456783',
   },
   center: {
     flex: 1,
@@ -135,9 +127,8 @@ var styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0.25 * screenWidth,
-    backgroundColor: '#FFFFFF',
   },
-  darkUnactive: {
+  overlay: {
     position: 'absolute',
     top: 0,
     bottom: 0,
@@ -146,37 +137,5 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   }
 });
-
-var mainStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#456783',
-  },
-});
-
-var navigationBarStyles = StyleSheet.create({
-  navigationBar: {
-    backgroundColor: '#FFFFFF',
-    height: 50,
-    position: 'absolute',
-    flexDirection: 'row',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  menuIcon: {
-    fontFamily: 'CanalDemiRomainG7',
-    fontSize: 30,
-  },
-  usersIcon: {
-    fontFamily: 'CanalDemiRomainG7',
-    fontSize: 30,
-  }
-});
-
 
 module.exports = SlideMenu;

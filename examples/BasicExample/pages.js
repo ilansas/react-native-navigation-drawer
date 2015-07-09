@@ -36,7 +36,7 @@ var ThirdPage = React.createClass({
   },
   render() {
     return (
-      <View style={pageStyle.firstpage}>
+      <View style={pageStyle.thirdpage}>
         <Text style={pageStyle.text}>The third is blocking the SlideMenu !</Text>
         <Text style={pageStyle.text}>But don&apos;t panic, here is a button !</Text>
         <Text style={pageStyle.button} onPress={this.onPress}>Go to second page !</Text>
@@ -55,6 +55,11 @@ var pageStyle = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: "#0F0"
+  },
+  thirdpage: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: "#00F"
   },
   button: {
     backgroundColor: '#0F0',

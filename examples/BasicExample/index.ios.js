@@ -8,7 +8,7 @@ var {
   View,
 } = React;
 
-var SlideMenu = require('./slideMenu.js');
+var SlideMenu = require('react-native-navigation-drawer');
 var Menu = require('./menu.js');
 
 var Pages = require('./pages.js');

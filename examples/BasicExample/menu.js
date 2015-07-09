@@ -21,15 +21,19 @@ var Menu = React.createClass({
 
           <Section
             id='firstpage'
-            icon='&#xF0A7;'
             name='FIRST PAGE'
             toggleSlideMenu={this.props.toggleSlideMenu}
             routeFrontView={this.props.routeFrontView}/>
 
           <Section
             id='secondpage'
-            icon='&#xF0B8;'
             name='SECOND PAGE'
+            toggleSlideMenu={this.props.toggleSlideMenu}
+            routeFrontView={this.props.routeFrontView}/>
+
+          <Section
+            id='thirdpage'
+            name='THIRD PAGE'
             toggleSlideMenu={this.props.toggleSlideMenu}
             routeFrontView={this.props.routeFrontView}/>
 

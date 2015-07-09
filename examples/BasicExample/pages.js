@@ -14,8 +14,7 @@ var FirstPage = React.createClass({
   render() {
     return (
       <View style={pageStyle.firstpage}>
-        <Text style={pageStyle.text}>Yep, this is the first page</Text>
-        <Text style={pageStyle.button} onPress={this.onPress}>Go to second page !</Text>
+        <Text style={pageStyle.text}>Yep, this is the first page !</Text>
       </View>
     );
   }
@@ -25,7 +24,22 @@ var SecondPage = React.createClass({
   render() {
     return (
       <View style={pageStyle.secondpage}>
-        <Text style={pageStyle.text}>And that, is the second one</Text>
+        <Text style={pageStyle.text}>And that, is the second one !</Text>
+      </View>
+    );
+  }
+});
+
+var ThirdPage = React.createClass({
+  onPress() {
+    this.props.routeFrontView('firstpage');
+  },
+  render() {
+    return (
+      <View style={pageStyle.firstpage}>
+        <Text style={pageStyle.text}>The third is blocking the SlideMenu !</Text>
+        <Text style={pageStyle.text}>But don&apos;t panic, here is a button !</Text>
+        <Text style={pageStyle.button} onPress={this.onPress}>Go to second page !</Text>
       </View>
     );
   }
@@ -53,5 +67,6 @@ var pageStyle = StyleSheet.create({
 
 module.exports = {
   FirstPage: FirstPage,
-  SecondPage: SecondPage
+  SecondPage: SecondPage,
+  ThirdPage: ThirdPage
 }

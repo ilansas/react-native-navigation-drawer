@@ -17,23 +17,30 @@ var SlideMenu = React.createClass({
   getInitialState() {
     return ({
       slideMenuIsOpen: false,
-      slideMenuIsAccessible: true,
     });
   },
+
+  blockSlideMenu(bool) {
+    this.blockSlideMenuState = bool;
+  },
+
   componentWillMount() {
+    this.blockSlideMenu(false);
     this.offset = 0 // Contains the center view offset from the right edge
     this._panGesture = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        if (this.state.slideMenuIsOpen) {
-          return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
-            && gestureState.dx > 20
-        } else {
-          if (this.firstTouch) {
-            if (evt.nativeEvent.pageX > 300)
-              this.firstTouch = false;
-          } else {
+        if (!this.blockSlideMenuState) {
+          if (this.state.slideMenuIsOpen) {
             return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
-              && gestureState.dx < -30
+              && gestureState.dx > 20
+          } else {
+            if (this.firstTouch) {
+              if (evt.nativeEvent.pageX > 300)
+                this.firstTouch = false;
+            } else {
+              return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
+                && gestureState.dx < -30
+            }
           }
         }
       },
@@ -43,6 +50,7 @@ var SlideMenu = React.createClass({
       onPanResponderTerminate: this.moveFinished,
     });
   },
+
   moveCenterView(right) {
     if (!this.center) return;
     this.right = right;

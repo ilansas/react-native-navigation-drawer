@@ -1,7 +1,6 @@
 # React Native Slide Menu (Navigation Drawer)
-### Still in progress ;)
 ## Description 
-A slide menu as we can see in Android which permits to route an item to the view (check out the example to create your routes). 
+A slide menu as we can see in Android which permits to route an item from the menu to a view displayed on the front view (check out the example to create your routes). 
 
 This Slide Menu comes from the right edge but hopefully it will be possible to choose in a near future.
 To open it you have to slide from the right border (and not from anywhere on the screen).
@@ -11,37 +10,42 @@ To open it you have to slide from the right border (and not from anywhere on the
 
 ## Usage Example
 ```jsx
-    var SlideMenu = require('react-native-navigation-drawer');
+var SlideMenu = require('react-native-navigation-drawer');
+var Menu = require('./menu.js');
 
-    var BasicExample = React.createClass({
-      getInitialState(fragmentId) {
-        return ({ route: 'firstpage' });
-      },
-    
-      updateFrontView() {
-        //routing your pages here, don't forget to add a section in the menu ;)
-        switch (this.state.route) {
-          case 'firstpage':
-            return <FirstPage />;
-          case 'secondpage':
-            return <SecondPage />;
-        }
-      },
+var Pages = require('./pages.js');
+var FirstPage = Pages.FirstPage;
+var SecondPage = Pages.SecondPage;
 
-      routeFrontView(fragmentId) {
-        this.setState({ route: fragmentId });
-      },
+var BasicExample = React.createClass({
+  getInitialState(fragmentId) {
+    return ({ route: 'firstpage' });
+  },
     
-      render() {
-        var fragment = this.updateFrontView();
-        return (
-          <View style={styles.container}>
-            <SlideMenu frontView={fragment} routeFrontView={this.routeFrontView}
-              menu={<Menu />}/>
-          </View>
-        );
-      }
-    });
+  updateFrontView() {
+    //routing your pages here, don't forget to add a section in the menu ;)
+    switch (this.state.route) {
+      case 'firstpage':
+        return <FirstPage />;
+      case 'secondpage':
+        return <SecondPage />;
+    }
+  },
+
+  routeFrontView(fragmentId) {
+    this.setState({ route: fragmentId });
+  },
+    
+  render() {
+    var fragment = this.updateFrontView();
+    return (
+      <View style={styles.container}>
+        <SlideMenu frontView={fragment} routeFrontView={this.routeFrontView}
+          menu={<Menu />}/>
+      </View>
+    );
+  }
+});
 ```    
 More details about pages and Menu in the project example.
 

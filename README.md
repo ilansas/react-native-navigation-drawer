@@ -7,10 +7,10 @@ This Slide Menu comes from the right edge but hopefully it will be possible to c
 To open it you have to slide from the right border (and not from anywhere on the screen).
 
 ## Installation
-    npm i --save react-native-navigation-drawer
+    $ npm i --save react-native-navigation-drawer
 
 ## Usage Example
-
+```jsx
     var SlideMenu = require('react-native-navigation-drawer');
 
     var BasicExample = React.createClass({
@@ -42,7 +42,7 @@ To open it you have to slide from the right border (and not from anywhere on the
         );
       }
     });
-    
+```    
 More details about pages and Menu in the project example.
 
 ## Properties

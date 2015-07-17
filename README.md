@@ -2,8 +2,8 @@
 ## Description 
 A slide menu as we can see in Android which permits to route an item from the menu to a view displayed on the front view (check out the example to create your routes). 
 
-This Slide Menu comes from the right edge but hopefully it will be possible to choose in a near future.
-To open it you have to slide from the right border (and not from anywhere on the screen).
+This Slide Menu can be opened by sliding from the left or by the right as you choose (see the prop in the example)
+To open it you have to slide from the right (or left) border (and not from anywhere on the screen).
 
 ## Installation
     $ npm i --save react-native-navigation-drawer
@@ -41,7 +41,7 @@ var BasicExample = React.createClass({
     return (
       <View style={styles.container}>
         <SlideMenu frontView={fragment} routeFrontView={this.routeFrontView}
-          menu={<Menu />}/>
+          menu={<Menu />} slideWay='left'/>
       </View>
     );
   }
@@ -59,10 +59,10 @@ Use it by using `this.refs`
 - `blockSlideMenu(boolean)`: to block the sliding when Slide Menu shouldn't open
 
 ## TODO
-- [ ] Choose slide way (from left or right)
 - [ ] Improve acceleration
 - [ ] Choose eather the panel overlays the front view or it moves the front view (like it is right now)
 - [ ] Choosing animation
+- [x] Choose slide way (from left or right)
 - [x] Block slide menu when we decide to
 - [x] Publish to npm
 - [x] Implement routes

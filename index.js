@@ -31,31 +31,52 @@ var SlideMenu = React.createClass({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
         if (!this.blockSlideMenuState) {
           if (this.state.slideMenuIsOpen) {
+            if (this.props.slideWay === 'left') {
+              return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
+                && gestureState.dx < 20
+            }
+
             return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
               && gestureState.dx > 20
           } else {
             if (this.firstTouch) {
-              if (evt.nativeEvent.pageX > 300)
-                this.firstTouch = false;
+              if (this.props.slideWay === 'left') {
+                if (evt.nativeEvent.pageX < 20)
+                  this.firstTouch = false;
+              } else {
+                if (evt.nativeEvent.pageX > 300)
+                  this.firstTouch = false;
+              }
             } else {
-              return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
-                && gestureState.dx < -30
+              if (this.props.slideWay === 'left') {
+                return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
+                  && gestureState.dx > 30
+              } else {
+                return Math.abs(gestureState.dx) > Math.abs(gestureState.dy)
+                  && gestureState.dx < -30
+              }
             }
           }
         }
       },
-      onPanResponderGrant: (evt, gestureState) => this.right = 0,
+      onPanResponderGrant: (evt, gestureState) => this.side = 0,
       onPanResponderMove: (evt, gestureState) => this.moveCenterView(gestureState.dx),
       onPanResponderRelease: this.moveFinished,
       onPanResponderTerminate: this.moveFinished,
     });
   },
 
-  moveCenterView(right) {
+  moveCenterView(side) {
     if (!this.center) return;
-    this.right = right;
-    this.center.setNativeProps({ right: this.offset - this.right });
+
+    this.side = side;
+
+    if (this.props.slideWay === 'left')
+      this.center.setNativeProps({ left: this.offset + this.side });
+    else
+      this.center.setNativeProps({ right: this.offset - this.side });
   },
+
   toggleSlideMenu() {
     if (this.state.slideMenuIsOpen) {
       this.offset = 0;
@@ -64,9 +85,15 @@ var SlideMenu = React.createClass({
       this.offset = screenWidth * 0.75;
       this.setState({ slideMenuIsOpen: true });
     }
+
     queueAnimation(this.props.animation);
-    this.center.setNativeProps({ right: this.offset });
+
+    if (this.props.slideWay === 'left')
+      this.center.setNativeProps({ left: this.offset });
+    else
+      this.center.setNativeProps({ right: this.offset });
   },
+
   moveFinished() {
     if (!this.center) return;
 
@@ -94,13 +121,21 @@ var SlideMenu = React.createClass({
       }
     );
 
+    if (this.props.slideWay === 'left') {
+      var frontWayStyle = {left: this.offset};
+      var menuStyle = styles.menuLeft;
+    } else {
+      var frontWayStyle = {right: this.offset};
+      var menuStyle = styles.menuRight;
+    }
+
     return (
       <View style={[styles.containerSlideMenu, this.props.style]}>
-        <View style={styles.right}>
+        <View style={menuStyle}>
           {menu}
         </View>
         <View
-          style={[styles.center, {right: this.offset}]}
+          style={[styles.center, frontWayStyle]}
           ref={(center) => this.center = center}
           {...this._panGesture.panHandlers}>
           {this.props.frontView}
@@ -119,12 +154,19 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  right: {
+  menuLeft: {
     position: 'absolute',
     top: 0,
-    right: 0,
+    left: 0,
     bottom: 0,
+    right: 0.25 * screenWidth,
+  },
+  menuRight: {
+    position: 'absolute',
+    top: 0,
     left: 0.25 * screenWidth,
+    bottom: 0,
+    right: 0,
   },
   overlay: {
     position: 'absolute',

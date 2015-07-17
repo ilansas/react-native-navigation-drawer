@@ -53,6 +53,7 @@ More details about pages and Menu in the project example.
 - `frontView`: the fragment to be displayed on the main view
 - `routeFrontView`: callback to update the main view
 - `menu`: the menu 
+- `slideWay`: the way the menu should open (from left or from right which is the default way)
 
 ## Methods
 Use it by using `this.refs` 

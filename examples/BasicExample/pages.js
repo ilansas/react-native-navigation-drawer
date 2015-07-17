@@ -39,7 +39,7 @@ var ThirdPage = React.createClass({
       <View style={pageStyle.thirdpage}>
         <Text style={pageStyle.text}>The third is blocking the SlideMenu !</Text>
         <Text style={pageStyle.text}>But don&apos;t panic, here is a button !</Text>
-        <Text style={pageStyle.button} onPress={this.onPress}>Go to second page !</Text>
+        <Text style={pageStyle.button} onPress={this.onPress}>Go to first page !</Text>
       </View>
     );
   }

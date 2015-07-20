@@ -8,7 +8,7 @@ var {
   View,
 } = React;
 
-var SlideMenu = require('react-native-navigation-drawer');
+var SlideMenu = require('./index.js');
 var Menu = require('./menu.js');
 
 var Pages = require('./pages.js');
@@ -46,7 +46,7 @@ var BasicExample = React.createClass({
       <View style={styles.container}>
         <SlideMenu ref="slideMenu" frontView={fragment}
           routeFrontView={this.routeFrontView} menu={<Menu />}
-          slideWay='left'/>
+          slideWay='left' moveFrontView={false} width={100}/>
       </View>
     );
   }

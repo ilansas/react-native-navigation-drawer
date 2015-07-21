@@ -1,6 +1,6 @@
 {
   "name": "react-native-navigation-drawer",
-  "version": "1.2",
+  "version": "1.2.2",
   "description": "A slide menu inspired from Android for React-Native",
   "main": "index.js",
   "scripts": {

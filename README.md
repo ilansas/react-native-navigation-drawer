@@ -2,7 +2,7 @@
 ## Description 
 A slide menu as we can see in Android which permits to route an item from the menu to a view displayed on the front view (check out the example to create your routes). 
 
-This Slide Menu can be opened by sliding from the left or by the right as you choose (see the prop in the example)
+This Slide Menu can be opened by sliding from the left or from the right as you choose (see the prop in the example)
 To open it you have to slide from the right (or left) border (and not from anywhere on the screen).
 
 ## Installation
@@ -41,7 +41,7 @@ var BasicExample = React.createClass({
     return (
       <View style={styles.container}>
         <SlideMenu frontView={fragment} routeFrontView={this.routeFrontView}
-          menu={<Menu />} slideWay='left'/>
+          menu={<Menu />} slideWay='left' moveFrontView={false} width={200}/>
       </View>
     );
   }
@@ -52,17 +52,20 @@ More details about pages and Menu in the project example.
 ## Properties
 - `frontView`: the fragment to be displayed on the main view
 - `routeFrontView`: callback to update the main view
-- `menu`: the menu 
-- `slideWay`: the way the menu should open (from left or from right which is the default way)
+- `menu`: the menu component
+- `slideWay`: the side where the menu should come from (left or right, right is default)
+- `moveFrontView`: either the menu should move the front view or overlay it
+- `width`: width of the menu
 
 ## Methods
-Use it by using `this.refs` 
+Use it with `this.refs` 
 - `blockSlideMenu(boolean)`: to block the sliding when Slide Menu shouldn't open
 
 ## TODO
 - [ ] Improve acceleration
-- [ ] Choose eather the panel overlays the front view or it moves the front view (like it is right now)
-- [ ] Choosing animation
+- [ ] Choose animation
+- [x] Choose size of the menu
+- [x] Choose if the panel overlays the front view or if it moves the front view (like it is right now)
 - [x] Choose slide way (from left or right)
 - [x] Block slide menu when we decide to
 - [x] Publish to npm

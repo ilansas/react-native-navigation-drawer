@@ -17,9 +17,12 @@ var queueAnimation = require('./animations.js');
 * this.props.moveFrontView: if the front view should move on swype
 * this.props.slideWay: the side where the menu is (left or right)
 * this.blockSlideMenuState: makes the menu available or not
-* this.offset : If the menu is on the left, represents the offset of the left
+* this.offset: Ovelay : If the menu is on the left, represents the offset of the left
 *              side of the menu. If the menu is on the right, represents the
 *              offset of the right side of the menu.
+*              moveFrontView : If the menu is on the left, represents the offset
+*              of the left side of the front view. If the menu is on the right,
+*              represents the offset of the right side of the front view.
 */
 
 var SlideMenu = React.createClass({
@@ -84,8 +87,9 @@ var SlideMenu = React.createClass({
   moveAppropriateView(position) {
     if (!this.center || !this.menu) return;
 
-    if (this.props.slideWay === 'left' && (this.offset + position <= 0)) {
-      if (this.props.moveFrontView) {
+    if (this.props.slideWay === 'left') {
+      if (this.props.moveFrontView
+        && this.offset + position <= this.props.width) {
         this.center.setNativeProps({ left: this.offset + position });
       } else if (this.offset + position <= 0) {
         this.menu.setNativeProps({
@@ -94,7 +98,8 @@ var SlideMenu = React.createClass({
         });
       }
     } else if (this.props.slideWay !== 'left') {
-      if (this.props.moveFrontView) {
+      if (this.props.moveFrontView
+        && this.offset - position <= this.props.width) {
         this.center.setNativeProps({ right: this.offset - position });
       } else if (this.offset - position <= 0) {
         this.menu.setNativeProps({

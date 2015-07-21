@@ -12,6 +12,16 @@ var Dimensions = require('Dimensions')
 var screenWidth = Dimensions.get('window').width
 var queueAnimation = require('./animations.js');
 
+/**
+* this.props.width : width of the menu
+* this.props.moveFrontView: if the front view should move on swype
+* this.props.slideWay: the side where the menu is (left or right)
+* this.blockSlideMenuState: makes the menu available or not
+* this.offset : If the menu is on the left, represents the offset of the left
+*              side of the menu. If the menu is on the right, represents the
+*              offset of the right side of the menu.
+*/
+
 var SlideMenu = React.createClass({
   firstTouch: true,
   getInitialState() {
@@ -26,7 +36,11 @@ var SlideMenu = React.createClass({
 
   componentWillMount() {
     this.blockSlideMenu(false);
-    this.offset = 0 // Contains the center view offset from the right edge
+
+    this.props.moveFrontView ?
+    this.offset = 0 :
+    this.offset = -this.props.width;
+
     this._panGesture = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
         if (!this.blockSlideMenuState) {
@@ -59,43 +73,74 @@ var SlideMenu = React.createClass({
           }
         }
       },
-      onPanResponderGrant: (evt, gestureState) => this.side = 0,
-      onPanResponderMove: (evt, gestureState) => this.moveCenterView(gestureState.dx),
+      onPanResponderGrant: (evt, gestureState) => this.position = 0,
+      onPanResponderMove: (evt, gestureState) =>
+        this.moveAppropriateView(gestureState.dx), //The menu or the center view
       onPanResponderRelease: this.moveFinished,
       onPanResponderTerminate: this.moveFinished,
     });
   },
 
-  moveCenterView(side) {
-    if (!this.center) return;
+  moveAppropriateView(position) {
+    if (!this.center || !this.menu) return;
 
-    this.side = side;
-
-    if (this.props.slideWay === 'left')
-      this.center.setNativeProps({ left: this.offset + this.side });
-    else
-      this.center.setNativeProps({ right: this.offset - this.side });
+    if (this.props.slideWay === 'left' && (this.offset + position <= 0)) {
+      if (this.props.moveFrontView) {
+        this.center.setNativeProps({ left: this.offset + position });
+      } else if (this.offset + position <= 0) {
+        this.menu.setNativeProps({
+          left: this.offset + position,
+          right: screenWidth - (this.offset + position + this.props.width)
+        });
+      }
+    } else if (this.props.slideWay !== 'left') {
+      if (this.props.moveFrontView) {
+        this.center.setNativeProps({ right: this.offset - position });
+      } else if (this.offset - position <= 0) {
+        this.menu.setNativeProps({
+          right: this.offset + position,
+          left: screenWidth + position
+        });
+      }
+    }
   },
 
   toggleSlideMenu() {
     if (this.state.slideMenuIsOpen) {
-      this.offset = 0;
+      this.props.moveFrontView ?
+      this.offset = 0 :
+      this.offset = -this.props.width;
+
       this.setState({ slideMenuIsOpen: false });
     } else {
-      this.offset = screenWidth * 0.75;
+      this.props.moveFrontView ?
+      this.offset = this.props.width :
+      this.offset = 0;
       this.setState({ slideMenuIsOpen: true });
     }
 
     queueAnimation(this.props.animation);
 
-    if (this.props.slideWay === 'left')
-      this.center.setNativeProps({ left: this.offset });
-    else
-      this.center.setNativeProps({ right: this.offset });
+    if (this.props.slideWay === 'left') {
+      this.props.moveFrontView ?
+      this.center.setNativeProps({ left: this.offset }) :
+      this.menu.setNativeProps({
+        left: this.offset,
+        right: screenWidth - (this.offset + this.props.width)
+      });
+    }
+    else {
+      this.props.moveFrontView ?
+      this.center.setNativeProps({ right: this.offset }) :
+      this.menu.setNativeProps({
+        right: this.offset,
+        left: this.offset - this.props.width
+      });
+    }
   },
 
   moveFinished() {
-    if (!this.center) return;
+    if (!this.center || !this.menu) return;
 
     this.toggleSlideMenu();
     this.firstTouch = true;
@@ -121,50 +166,82 @@ var SlideMenu = React.createClass({
       }
     );
 
-    if (this.props.slideWay === 'left') {
-      var frontWayStyle = {left: this.offset};
-      var menuStyle = styles.menuLeft;
-    } else {
-      var frontWayStyle = {right: this.offset};
-      var menuStyle = styles.menuRight;
-    }
+    if (this.props.moveFrontView) {
+      if (this.props.slideWay === 'left') {
+        var frontWayStyle = { left: this.offset };
+      } else {
+        var frontWayStyle = { right: this.offset };
+        var rightStyle = { left: screenWidth - this.props.width };
+      }
 
-    return (
-      <View style={[styles.containerSlideMenu, this.props.style]}>
-        <View style={menuStyle}>
-          {menu}
+      return (
+        <View style={[styles.containerSlideMenu, this.props.style]}>
+          <View
+            style={[styles.fixedMenu, rightStyle]}
+            ref={(menu) => this.menu = menu}>
+            {menu}
+          </View>
+          <View
+            style={[styles.center, frontWayStyle]}
+            ref={(center) => this.center = center}
+            {...this._panGesture.panHandlers}>
+            {this.props.frontView}
+            {overlay}
+          </View>
         </View>
-        <View
-          style={[styles.center, frontWayStyle]}
-          ref={(center) => this.center = center}
-          {...this._panGesture.panHandlers}>
-          {this.props.frontView}
-          {overlay}
+      );
+    } else {
+      if (this.props.slideWay === 'left') {
+        var menuWayStyle = {
+          left: this.offset,
+          right: screenWidth - (this.offset + this.props.width)
+        };
+      } else {
+        var menuWayStyle = {
+          right: this.offset,
+          left: screenWidth - (this.offset + this.props.width)
+        };
+      }
+
+      return (
+        <View style={[styles.containerSlideMenu, this.props.style]}>
+          <View
+            style={[styles.center]}
+            ref={(center) => this.center = center}
+            {...this._panGesture.panHandlers}>
+            {this.props.frontView}
+            {overlay}
+          </View>
+          <View
+            style={[styles.overMenu, menuWayStyle]}
+            ref={(menu) => this.menu = menu}>
+            {menu}
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   },
 });
 
 var styles = StyleSheet.create({
   containerSlideMenu: {
     flex: 1,
+    backgroundColor: '#345678',
+    flexDirection: 'row'
   },
   center: {
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  menuLeft: {
+  overMenu: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+  },
+  fixedMenu: {
     position: 'absolute',
     top: 0,
     left: 0,
-    bottom: 0,
-    right: 0.25 * screenWidth,
-  },
-  menuRight: {
-    position: 'absolute',
-    top: 0,
-    left: 0.25 * screenWidth,
     bottom: 0,
     right: 0,
   },

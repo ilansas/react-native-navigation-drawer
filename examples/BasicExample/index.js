@@ -30,7 +30,9 @@ var SlideMenu = React.createClass({
   componentWillMount() {
     this.blockSlideMenu(false);
     width = this.props.width;
-    this.offset = -width; // Contains the center view offset from the right edge
+
+    this.offset = -width;
+
     this._panGesture = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
         if (!this.blockSlideMenuState) {
@@ -78,10 +80,10 @@ var SlideMenu = React.createClass({
       this.props.moveFrontView ?
       this.center.setNativeProps({ left: this.offset + side }) :
       this.menu.setNativeProps({ left: this.offset + side, right: screenWidth - (this.offset + side + width)});
-    } else if (this.props.slideWay !== 'left') {
+    } else if (this.props.slideWay !== 'left' && (this.offset - side <= 0)) {
       this.props.moveFrontView ?
-      this.center.setNativeProps({ right: this.offset - sside }) :
-      this.menu.setNativeProps({ right: this.offset - side });
+      this.center.setNativeProps({ right: this.offset - side }) :
+      this.menu.setNativeProps({ right: this.offset + side, left: screenWidth + side  });
     }
   },
 
@@ -104,7 +106,7 @@ var SlideMenu = React.createClass({
     else {
       this.props.moveFrontView ?
       this.center.setNativeProps({ right: this.offset }) :
-      this.menu.setNativeProps({ right: this.offset });
+      this.menu.setNativeProps({ right: this.offset, left: this.offset - width });
     }
   },
 
@@ -162,7 +164,7 @@ var SlideMenu = React.createClass({
         var menuWayStyle = {left: this.offset, right: screenWidth - (this.offset + width)};
         var menuStyle = styles.menuLeft;
       } else {
-        var menuWayStyle = {left: this.offset};
+        var menuWayStyle = {right: this.offset, left: screenWidth - (this.offset + width)};
         var menuStyle = styles.menuRight;
       }
       return (
@@ -203,9 +205,9 @@ var styles = StyleSheet.create({
   menuRight: {
     position: 'absolute',
     top: 0,
-    left: 0.25 * screenWidth,
+    //left: 0.25 * screenWidth,
     bottom: 0,
-    right: 0,
+    //right: 0,
   },
   overlay: {
     position: 'absolute',

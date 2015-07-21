@@ -31,6 +31,8 @@ var SlideMenu = React.createClass({
     this.blockSlideMenu(false);
     width = this.props.width;
 
+    this.props.moveFrontView ?
+    this.offset = 0 :
     this.offset = -width;
 
     this._panGesture = PanResponder.create({
@@ -77,21 +79,36 @@ var SlideMenu = React.createClass({
     if (!this.center || !this.menu) return;
 
     if (this.props.slideWay === 'left' && (this.offset + side <= 0)) {
-      this.props.moveFrontView ?
-      this.center.setNativeProps({ left: this.offset + side }) :
-      this.menu.setNativeProps({ left: this.offset + side, right: screenWidth - (this.offset + side + width)});
-    } else if (this.props.slideWay !== 'left' && (this.offset - side <= 0)) {
-      this.props.moveFrontView ?
-      this.center.setNativeProps({ right: this.offset - side }) :
-      this.menu.setNativeProps({ right: this.offset + side, left: screenWidth + side  });
+      if (this.props.moveFrontView) {
+        this.center.setNativeProps({ left: this.offset + side });
+      } else if (this.offset + side <= 0) {
+        this.menu.setNativeProps({
+          left: this.offset + side,
+          right: screenWidth - (this.offset + side + width)
+        });
+      }
+    } else if (this.props.slideWay !== 'left') {
+      if (this.props.moveFrontView) {
+        this.center.setNativeProps({ right: this.offset - side });
+      } else if (this.offset - side <= 0) {
+        this.menu.setNativeProps({
+          right: this.offset + side,
+          left: screenWidth + side
+        });
+      }
     }
   },
 
   toggleSlideMenu() {
     if (this.state.slideMenuIsOpen) {
+      this.props.moveFrontView ?
+      this.offset = 0 :
       this.offset = -width;
+
       this.setState({ slideMenuIsOpen: false });
     } else {
+      this.props.moveFrontView ?
+      this.offset = width :
       this.offset = 0;
       this.setState({ slideMenuIsOpen: true });
     }
@@ -139,15 +156,16 @@ var SlideMenu = React.createClass({
 
     if (this.props.moveFrontView) {
       if (this.props.slideWay === 'left') {
-        var frontWayStyle = {left: this.offset};
-        var menuStyle = styles.menuLeft;
+        var frontWayStyle = { left: this.offset };
       } else {
-        var frontWayStyle = {right: this.offset};
-        var menuStyle = styles.menuRight;
+        var frontWayStyle = { right: this.offset };
+        var rightStyle = { left: screenWidth - width };
       }
       return (
         <View style={[styles.containerSlideMenu, this.props.style]}>
-          <View style={menuStyle} ref={(menu) => this.menu = menu}>
+          <View
+            style={[styles.fixedMenu, rightStyle]}
+            ref={(menu) => this.menu = menu}>
             {menu}
           </View>
           <View
@@ -162,11 +180,12 @@ var SlideMenu = React.createClass({
     } else {
       if (this.props.slideWay === 'left') {
         var menuWayStyle = {left: this.offset, right: screenWidth - (this.offset + width)};
-        var menuStyle = styles.menuLeft;
       } else {
         var menuWayStyle = {right: this.offset, left: screenWidth - (this.offset + width)};
-        var menuStyle = styles.menuRight;
       }
+
+      var menuStyle = styles.overMenu;
+
       return (
         <View style={[styles.containerSlideMenu, this.props.style]}>
           <View
@@ -195,19 +214,17 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  menuLeft: {
+  overMenu: {
     position: 'absolute',
     top: 0,
     bottom: 0,
-    //right: screenWidth - width,
-    //width: width
   },
-  menuRight: {
+  fixedMenu: {
     position: 'absolute',
     top: 0,
-    //left: 0.25 * screenWidth,
+    left: 0,
     bottom: 0,
-    //right: 0,
+    right: 0,
   },
   overlay: {
     position: 'absolute',

@@ -46,7 +46,7 @@ var BasicExample = React.createClass({
       <View style={styles.container}>
         <SlideMenu ref="slideMenu" frontView={fragment}
           routeFrontView={this.routeFrontView} menu={<Menu />}
-          slideWay='right' moveFrontView={false} width={100}/>
+          slideWay='left' moveFrontView={false} width={250}/>
       </View>
     );
   }

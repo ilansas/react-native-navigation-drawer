@@ -5,6 +5,8 @@ A slide menu as we can see in Android which permits to route an item from the me
 This Slide Menu can be opened by sliding from the left or from the right as you choose (see the prop in the example)
 To open it you have to slide from the right (or left) border (and not from anywhere on the screen).
 
+![alt tag](http://img11.hostingpics.net/pics/282364gif.gif)
+
 ## Installation
     $ npm i --save react-native-navigation-drawer
 
